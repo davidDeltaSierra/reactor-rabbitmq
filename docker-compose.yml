@@ -1,0 +1,32 @@
+version: "3"
+services:
+  rabbitmq:
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 128M
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    environment:
+      - spring.rabbitmq.host=rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy

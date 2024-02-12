@@ -1,0 +1,7 @@
+spring:
+  rabbitmq:
+    host: localhost
+
+logging:
+  level:
+    reactor.rabbitmq: off
